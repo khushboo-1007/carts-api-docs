@@ -6,6 +6,7 @@ The following endpoints are covered in this document.
 
 - `GET /carts` — get a list of all carts
 - `GET /carts/{id}` — find the cart with the mentioned id
+- `GET /carts/user/{id}` — find the carts that belong to the mentioned user
 
 ## Get All Carts
 
@@ -132,3 +133,64 @@ The example below shows only one of the cart's four products, for brevity. The `
 | `200 OK` | The cart with the given ID is returned |
 | `404 Not Found` | No cart exists with the given ID; an error message is returned |
 
+## Find Carts by User ID
+
+**Method:** `GET`
+**Path:** `/carts/user/{id}`
+
+**Path Parameters:**
+
+| Parameter | Required | Description |
+|---|---|---|
+| `id` | Yes | The unique ID of the user whose carts you want to retrieve |
+
+This endpoint returns the carts that belong to the given user. The carts are returned in a `carts` array, even when the user has only one cart. Each cart object has the same fields described under Get All Carts.
+
+**Response Fields:**
+
+| Field | Description |
+|---|---|
+| `carts` | Array of the carts that belong to the user |
+| `total` | Number of carts that belong to this user (not the number of carts in the whole system) |
+| `skip` | Number of carts skipped before this list begins |
+| `limit` | Number of carts returned in this response |
+
+**Response Example:**
+
+The example below is the response for a user who has one cart. Only one of that cart's four products is shown, for brevity, and the `thumbnail` field is also omitted. The cart-level totals still reflect all four products.
+
+```json
+{
+  "carts": [
+    {
+      "id": 1,
+      "products": [
+        {
+          "id": 162,
+          "title": "Blue Frock",
+          "price": 29.99,
+          "quantity": 4,
+          "total": 119.96,
+          "discountPercentage": 12.13,
+          "discountedTotal": 105.41
+        }
+      ],
+      "total": 13037.88,
+      "discountedTotal": 11510.81,
+      "userId": 1,
+      "totalProducts": 4,
+      "totalQuantity": 12
+    }
+  ],
+  "total": 1,
+  "skip": 0,
+  "limit": 1
+}
+```
+
+**Possible Responses:**
+
+| Status | Meaning |
+|---|---|
+| `200 OK` | The carts that belong to the user are returned |
+| `404 Not Found` | No user exists with the given ID; an error message is returned |
