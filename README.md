@@ -5,6 +5,7 @@ The DummyJSON Carts API provides sample e-commerce cart data for learning and pr
 The following endpoints are covered in this document.
 
 - `GET /carts` — get a list of all carts
+- `GET /carts/{id}` — find the cart with the mentioned id
 
 ## Get All Carts
 
@@ -84,3 +85,50 @@ The example below shows only one cart, and only one of its four products, for br
 | Status | Meaning |
 |---|---|
 | `200 OK` | The list of carts is returned |
+
+## Find Cart by ID
+
+**Method:** `GET`
+**Path:** `/carts/{id}`
+
+**Path Parameters:**
+
+| Parameter | Required | Description |
+|---|---|---|
+| `id` | Yes | The unique ID of the cart to retrieve |
+
+This endpoint returns a single cart matching the given ID, along with the products in it and the totals calculated for that cart. The response is one cart object, not a list, so it has no `carts` array and no `total`, `skip` or `limit` fields. The cart object has the same fields described under Get All Carts.
+
+**Response Example:**
+
+The example below shows only one of the cart's four products, for brevity. The `thumbnail` field is also omitted. The cart-level totals still reflect all four products.
+
+```json
+{
+  "id": 1,
+  "products": [
+    {
+      "id": 162,
+      "title": "Blue Frock",
+      "price": 29.99,
+      "quantity": 4,
+      "total": 119.96,
+      "discountPercentage": 12.13,
+      "discountedTotal": 105.41
+    }
+  ],
+  "total": 13037.88,
+  "discountedTotal": 11510.81,
+  "userId": 1,
+  "totalProducts": 4,
+  "totalQuantity": 12
+}
+```
+
+**Possible Responses:**
+
+| Status | Meaning |
+|---|---|
+| `200 OK` | The cart with the given ID is returned |
+| `404 Not Found` | No cart exists with the given ID; an error message is returned |
+
