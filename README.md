@@ -9,6 +9,7 @@ The following endpoints are covered in this document.
 - `GET /carts/user/{id}` — find the carts that belong to the mentioned user
 - `POST /carts/add` — add a new cart
 - `PUT /carts/{id}` — update an existing cart
+- `DELETE /carts/{id}` — delete a cart
 
 ## Get All Carts
 
@@ -269,8 +270,6 @@ Inside each product, the discounted amount is named `discountedPrice` in this re
 |---|---|
 | `201 Created` | The simulated cart is returned with a new `id` (not actually saved) |
 | `400 Bad Request` | The request was rejected as invalid; an error message is returned |
-| `404 Bad Request` | The cart with the mentioned Id was not found |
-
 
 ## Update a Cart
 
@@ -342,4 +341,64 @@ The example below is the response for cart `200`. It shows two of the cart's six
 |---|---|
 | `200 OK` | The simulated updated cart is returned (not actually saved) |
 | `400 Bad Request` | The request was rejected as invalid; an error message is returned |
+| `404 Not Found` | No cart exists with the given ID; an error message is returned |
+
+## Delete a Cart
+
+**Method:** `DELETE`
+
+**Path:** `/carts/{id}`
+
+**Path Parameters:**
+
+| Parameter | Required | Description |
+|---|---|---|
+| `id` | Yes | The unique ID of the cart to delete |
+
+This endpoint simulates deleting a cart and returns the details of the cart with two extra fields, `isDeleted` and `deletedOn`.
+
+> **Note:** DummyJSON simulates this request. The cart is returned in the response, but it is not actually deleted — a subsequent `GET /carts/{id}` call will still show the cart.
+
+**Response Example:**
+
+The example below is the response for cart `200`. It shows two of the cart's six products, and the `thumbnail` field is omitted for brevity. The cart-level totals still reflect all six products.
+
+```json
+{
+  "id": 200,
+  "products": [
+    {
+      "id": 87,
+      "title": "Men Check Shirt",
+      "price": 27.99,
+      "quantity": 5,
+      "total": 139.95,
+      "discountPercentage": 11.38,
+      "discountedTotal": 124.02
+    },
+    {
+      "id": 44,
+      "title": "Family Tree Photo Frame",
+      "price": 29.99,
+      "quantity": 3,
+      "total": 89.97,
+      "discountPercentage": 14.87,
+      "discountedTotal": 76.59
+    }
+  ],
+  "total": 22694.77,
+  "discountedTotal": 21783.54,
+  "userId": 200,
+  "totalProducts": 6,
+  "totalQuantity": 23,
+  "isDeleted": true,
+  "deletedOn": "2026-10-14T06:10:00.383Z"
+}
+```
+
+**Possible Responses:**
+
+| Status | Meaning |
+|---|---|
+| `200 OK` | The cart details are returned with `isDeleted` and `deletedOn` fields (not actually deleted) |
 | `404 Not Found` | No cart exists with the given ID; an error message is returned |
